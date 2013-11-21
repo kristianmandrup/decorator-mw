@@ -6,8 +6,8 @@ describe 'Decoration', ->
   decoration = null
 
   before ->
-    decoration = Decoration
+    decoration := new Decoration()
 
   specify 'creates a decoration', ->
-    # Decoration
+    decoration.should.be.an.instanceOf(Decoration)
 

@@ -4,7 +4,10 @@
     "main":     "decorator.js",
     "dependencies": {
         "lodash" : "~2.3.0",
-        "sugar" : "*"
+        "sugar" : "*",
+        "observer": "~1.1.*",
+        "watchjs": "*",
+        "property": "*"
     },
     "scripts": {
         "test": "mocha"

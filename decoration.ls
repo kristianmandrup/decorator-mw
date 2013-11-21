@@ -1,5 +1,8 @@
-module.exports.Decoration =
-  decorators: {}
+_ = require "lodash"
+
+module.exports = class Decoration
+  @decorators = {}
+
   decorate: (obj, model, context) ->
     decorator = @decorators[model](context)
     decoratedObj = _.extend {}, obj, decorator.blueprint

@@ -1,5 +1,11 @@
 _ = require "lodash"
 
-module.exports = (model, context) ->
+module.exports.ObjDecorator = class ObjDecorator
+  (@model, @context) ->
+
   blueprint: {}
-  customizeFor: (context) ->
+
+  customizeFor: (@context) ->
+
+  decorate: ->
+    @model
