@@ -1,0 +1,17 @@
+{
+    "name":     "decorator-mw",
+    "version":  "0.0.1",
+    "main":     "decorator.js",
+    "dependencies": {
+        "lodash" : "~2.3.0",
+        "sugar" : "*"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "devDependencies": {
+        "LiveScript": "*",
+        "mocha": "*",
+        "should": "*"
+    }
+}
