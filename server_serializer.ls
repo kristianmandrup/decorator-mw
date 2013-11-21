@@ -1,3 +1,4 @@
+type = require './type'
 ObjDecorator = require '../../obj_decorator'
 
 module.exports = class ServerSerializer extends ObjDecorator

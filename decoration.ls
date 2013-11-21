@@ -1,13 +1,18 @@
 _ = require "lodash"
 
 module.exports = class Decoration
+  # class properties
   @decorators = {}
 
-  decorate: (obj, model, context) ->
-    decorator = @decorators[model](context)
-    decoratedObj = _.extend {}, obj, decorator.blueprint
+  @add = (objDecorator, name) ->
+    name ||= objDecorator.name
+    @decorators[name] = objDecorator
+
+  (@object, @name) ->
+
+  decorateFor: (context) ->
+    decorator = @decorators[@name](context)
+    decoratedObj = _.extend {}, @object, decorator.blueprint
     customized = decorator.customizeFor context
     _.extend decoratedObj, customized
 
-  add: (objDecorator) ->
-    @decorators[objDecorator.model] = objDecorator
