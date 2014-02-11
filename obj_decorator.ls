@@ -1,11 +1,57 @@
-_ = require "lodash"
+Class   = require('jsclass/src/core').Class
+Module  = require('jsclass/src/core').Module
+Forwardable = require('jsclass/src/forward').Forwardable;
 
-module.exports.ObjDecorator = class ObjDecorator
-  (@model, @context) ->
+BaseModel = new Class(
+  initialize: (obj) ->
+    _.keys(obj).each (key) ->
+      @[key] = obj[key]
+)
 
-  blueprint: {}
+Person = new Class(BaseModel,
+  initialize: (obj) ->
+    @callSuper!
 
-  customizeFor: (@context) ->
+  fullName: ->
+    [@firstName, @lastName].join ' '
+)
 
-  decorate: ->
-    @model
+Decorations = new Class(
+  initialize: ->
+    @repository = new Hash
+
+  get: (name) ->
+    @repository.get name
+
+  set: (name, klass) ->
+    @repository.set name, klass
+)
+
+ContextDecorations = new Class(
+  initialize: ->
+    @repository = new Hash
+
+  get-for: (name) ->
+    decs = @ctx-decorations.get(name) || new Decorations
+    @ctx-decorations.set name, decs
+    decs
+
+  get: (ctx, model) ->
+    @get(ctx).get model
+
+  set: (ctx, decorations, name) ->
+    obj = if name? then decorations else decorations[name]
+    @repository.set ctx, obj
+)
+
+class DecoratorMw extends ModelMw
+  (@context) ->
+    @decorations = new ContextDecorations @context
+
+  # lookup context
+  # find decoration based on klass and context
+  run: (ctx) ->
+    super ...
+    klass = @decorations.get @context, @model
+    new klass @data
+
