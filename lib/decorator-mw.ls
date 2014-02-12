@@ -1,4 +1,7 @@
-ContextDecorations = require 'context_decorations'
+rek       = require 'rekuire'
+requires  = rek 'requires'
+
+ContextDecorations = requires.file 'context_decorations'
 
 module.exports = class DecoratorMw extends ModelMw
   (@context) ->

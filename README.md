@@ -4,8 +4,6 @@ Middleware to serialize object to server and back to client
 
 ## TODO
 
-Add *requires* and *debugger*
-
 Create test suite
 
 ## Decorator
@@ -15,15 +13,8 @@ Using `klass` attribute to lookup class on client class Repo (Hash).
 Instantiate Class with object
 
 ```LiveScript
-Class   = require('jsclass/src/core').Class
-Module  = require('jsclass/src/core').Module
-Forwardable = require('jsclass/src/forward').Forwardable;
-
-BaseModel = new Class(
-  initialize: (obj) ->
-    _.keys(obj).each (key) ->
-      @[key] = obj[key]
-)
+BaseModel           = requires.file 'base_model'
+ContextDecorators   = require('decorator-mw').ContextDecorators
 
 Person = new Class(BaseModel,
   initialize: (obj) ->
@@ -33,42 +24,28 @@ Person = new Class(BaseModel,
     [@firstName, @lastName].join ' '
 )
 
-Decorations = new Class(
-  initialize: ->
-    @repository = new Hash
+DecorateMw = requires.file 'decorate-mw'
 
-  get: (name) ->
-    @repository.get name
+load-mw-stack = new Middleware('model').use(decorate: DecorateMw)
 
-  set: (name, klass) ->
-    @repository.set name, klass
-)
+app ||=
+  decorators: new ContextDecorators
 
-ContextDecorations = new Class(
-  initialize: ->
-    @repository = new Hash
+# should be a global repo
+app.decorators.set 'person', Person
 
-  get-for: (name) ->
-    decs = @ctx-decorations.get(name) || new Decorations
-    @ctx-decorations.set name, decs
-    decs
+person =
+    name: 'Joe 6 Pack'
+age: 28
+clazz: 'person' # important!
 
-  get: (ctx, model) ->
-    @get(ctx).get model
-
-  set: (ctx, decorations, name) ->
-    obj = if name? then decorations else decorations[name]
-    @repository.set ctx, obj
-)
-
-class DecoratorMw extends ModelMw
-  (@context) ->
-    @decorations = new ContextDecorations @context
-
-  # lookup context
-  # find decoration based on klass and context
-  run: (ctx) ->
-    super ...
-    klass = @decorations.get @context, @model
-    new klass @data
+# find and instantiate model class via clazz attribute (= 'person')
+decorated-person = load-mw-stack.run person
 ```
+
+Yeah!
+
+## License
+
+MIT 2014
+Copyright 2014 Kristian Mandrup

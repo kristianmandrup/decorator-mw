@@ -4,6 +4,11 @@ Hash   = require('jsclass/src/core').Hash
 
 _ = require 'prelude-ls'
 
+rek       = require 'rekuire'
+requires  = rek 'requires'
+
+Decorations = requires.file 'decorations'
+
 module.exports = new Class(
   initialize: ->
     @repository = new Hash

@@ -11,7 +11,7 @@ underscore = (...items) ->
 
 full-path = (base, ...paths) ->
   upaths = underscore(...paths)
-  ['.', base, upaths].flatten!.join '/'
+  ['./lib', base, upaths].flatten!.join '/'
 
 test-path = (...paths) ->
   full-path 'test', ...paths
