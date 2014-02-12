@@ -2,7 +2,11 @@
 
 Middleware to serialize object to server and back to client
 
-Much TODO...
+## TODO
+
+Add *requires* and *debugger*
+
+Create test suite
 
 ## Decorator
 
