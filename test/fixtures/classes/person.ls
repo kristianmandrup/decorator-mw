@@ -1,4 +1,6 @@
-Person = new Class(BaseModel,
+BaseModel = requires.file 'base_model'
+
+module.exports = new Class(BaseModel,
   initialize: (obj) ->
     @callSuper!
 
