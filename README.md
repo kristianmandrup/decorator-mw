@@ -2,11 +2,7 @@
 
 Middleware to serialize object to server and back to client
 
-## TODO
-
-Create test suite
-
-## Decorator
+## Usage
 
 Using `klass` attribute to lookup class on client class Repo (Hash).
 
@@ -43,7 +39,11 @@ clazz: 'person' # important!
 decorated-person = load-mw-stack.run person
 ```
 
-Yeah!
+## TODO
+
+Create better test suite!
+
+Please help out ;)
 
 ## License
 

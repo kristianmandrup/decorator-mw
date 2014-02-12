@@ -10,8 +10,13 @@ requires  = rek 'requires'
 Decorations = requires.file 'decorations'
 
 module.exports = new Class(
-  initialize: ->
+  initialize: (decorations)->
     @repository = new Hash
+
+    return if decorations is void
+    if _.is-type 'Object', decorations
+      decorations.each (name, dec) ->
+        @set name, dec
  
   # ctx-name (String) the name of the context, if none given, use 'default' context
   # - get a Hash of decorations for a given context 
