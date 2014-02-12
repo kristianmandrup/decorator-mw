@@ -25,9 +25,9 @@ module.exports =
     require test-path(...paths)
 
   clazz: (paths) ->
-    @fixtures 'classes', path
+    @fixture 'classes', path
 
-  fixture: (path) ->
+  fixture: (...path) ->
     @test 'fixtures', path
 
   file: (path) ->
