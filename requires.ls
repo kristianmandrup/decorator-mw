@@ -11,6 +11,10 @@ underscore = (...items) ->
 
 full-path = (base, ...paths) ->
   upaths = underscore(...paths)
+  ['.', base, upaths].flatten!.join '/'
+
+lib-path = (base, ...paths) ->
+  upaths = underscore(...paths)
   ['./lib', base, upaths].flatten!.join '/'
 
 test-path = (...paths) ->
@@ -24,14 +28,14 @@ module.exports =
   test: (...paths) ->
     require test-path(...paths)
 
-  clazz: (paths) ->
-    @fixture 'classes', path
+  clazz: (...paths) ->
+    @fixture 'classes', paths
 
-  fixture: (...path) ->
-    @test 'fixtures', path
+  fixture: (...paths) ->
+    @test 'fixtures', paths
 
-  file: (path) ->
-    require full-path('.', path)
+  file: (...paths) ->
+    require lib-path('.', paths)
 
   # m - alias for module
   m: (path) ->

@@ -1,5 +1,2 @@
+*.log
 node_modules
-*.js
-*.map
-.idea
-.DS_Store

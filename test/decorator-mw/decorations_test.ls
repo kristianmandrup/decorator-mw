@@ -10,9 +10,9 @@ Person = requires.clazz 'person'
 
 DecoratorMw = requires.file 'decorator-mw'
 
-load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
+# load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
 
-Decorators = requires.file 'decorations'
+Decorations = requires.file 'decorations'
 
 describe Decorations ->
   decs = {}
@@ -64,6 +64,14 @@ describe Decorations ->
         expect(decs.basic.get 'x').to.eql 'y'
 
   describe 'set' ->
+    context 'repo x' ->
+      before ->
+        decs.setme = new Decorations
+
+      specify 'x is found' ->
+        expect(decs.setme.set 'x').to.throw
+
+
     context 'repo x = 2' ->
       before ->
         decs.setme = new Decorations

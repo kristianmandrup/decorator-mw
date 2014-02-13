@@ -5,12 +5,15 @@
     "dependencies": {
         "lodash" :      "~2.3.0",
         "sugar" :       "*",
+        "prelude-ls" :  "*",        
         "observer":     "~1.1.*",
         "watchjs":      "*",
         "property":     "*",
         "jsclass":      "*",
         "rekuire":      "*",
-        "inflection":   "*"
+        "inflection":   "*",
+        "middleware":   "git://github.com/kristianmandrup/middleware.git",
+        "model-mw":     "git://github.com/kristianmandrup/model-mw.git"        
     },
     "scripts": {
         "test": "mocha"

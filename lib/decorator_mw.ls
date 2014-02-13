@@ -1,16 +1,21 @@
 rek       = require 'rekuire'
 requires  = rek 'requires'
 
+ModelMw = require('model-mw').ModelMw
+
 ContextDecorations = requires.file 'context_decorations'
 
 module.exports = class DecoratorMw extends ModelMw
   (@context) ->
     super ...
-    @decorations = if @context.decorators? then create-decorations(@context.decorators) else app.decorators
+    @decorations = calc-decorations context 
+ 
+  calc-decorations: (context) ->
+    if context.decorators? then create-decorations(context.decorators) else app.decorators
  
   create-decorations: (context) ->
     new ContextDecorations context
- 
+  
   # lookup context
   # find decoration based on klass and context
   # model will be set by inherited ModelMw 
