@@ -1,5 +1,4 @@
-rek       = require 'rekuire'
-requires  = rek 'requires'
+requires  = require '../../requires'
 
 requires.test 'test_setup'
 
@@ -8,11 +7,13 @@ expect = require('chai').expect
 
 Person = requires.clazz 'person'
 
-DecoratorMw = requires.file 'decorator-mw'
+DecoratorMw = requires.lib 'decorator_mw'
 
-load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
+# Middleware = require('middleware).Middleware
 
-ContextDecorators = requires.file 'decorations'
+# load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
+
+ContextDecorators = requires.lib 'decorations'
 
 describe ContextDecorations ->
   cds = {}
@@ -46,14 +47,14 @@ describe ContextDecorations ->
       specify 'repo y = 2' ->
         cds.basic.repository.y.should.eql 2
 
-  describe 'get' ->
+  xdescribe 'get' ->
     context 'empty repo' ->
       before ->
         dcs.empty = new Decorations
       specify 'x not found' ->
         expect(dcs.empty.get 'x').to.eql void
 
-  describe 'set' ->
+  xdescribe 'set' ->
     context 'repo x = 2' ->
       before ->
         decs.setme = new Decorations

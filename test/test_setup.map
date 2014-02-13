@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "test_setup.js",
+  "sourceRoot": "",
+  "sources": [
+    "test_setup.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA;CAAA"
+}

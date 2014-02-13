@@ -1,21 +1,34 @@
 Class   = require('jsclass/src/core').Class
 Module  = require('jsclass/src/core').Module
-Hash   = require('jsclass/src/core').Hash
+Hash    = require('jsclass/src/hash').Hash
 
-module.exports = new Class(
-  initialize: (decorations)->
-    @repository = new Hash
+_       = require 'prelude-ls'
+require 'sugar'
+
+requires  = require '../requires'
+
+Debugger  = require '../debugger'
+
+Decorations = new Class(
+  include: Debugger
+
+  initialize: (decorations) ->
+    self = @
+    @repository = {}
+
     return if decorations is void
-    unless _.is-type 'Object', decorations
-      throw Error "Must be an Object, was : #{typeof klass} :: #{decorations}"
 
-    decorations.each (name, dec) ->
-      @set name, dec
+    unless _.is-type 'Object', decorations
+      throw Error "Must be an Object, was : #{typeof klass} #{decorations}"
+
+    _.keys(decorations).each (name) ->
+      self.repository[name] = decorations[name]
+    @
 
   # model-name (String) the name of the model
   # returns a "Class"
   get: (model-name) ->
-    @repository.get model-name
+    @repository[model-name]
  
   # model-name: the name of the model
   # klass : the "Class" to set for the model-name key
@@ -24,5 +37,7 @@ module.exports = new Class(
     unless _.is-type 'Function', klass
       throw Error "klass to be set must be a Function, was: #{typeof klass} :: #{klass}"
 
-    @repository.set model-name, klass
+    @repository[model-name] = klass
 )
+
+module.exports = Decorations

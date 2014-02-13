@@ -8,7 +8,7 @@ expect = require('chai').expect
 
 Person = requires.clazz 'person'
 
-DecoratorMw = requires.file 'decorator-mw'
+DecoratorMw = requires.file 'decorator_mw'
 
 load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
 

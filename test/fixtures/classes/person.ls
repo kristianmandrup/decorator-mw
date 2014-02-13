@@ -1,14 +1,15 @@
-rek       = require 'rekuire'
-requires  = rek 'requires'
+requires  = require '../../../requires'
 
 Class   = require('jsclass/src/core').Class
 
-BaseModel = requires.file 'base_model'
+BaseModel = requires.lib 'base_model'
 
-module.exports = new Class(BaseModel,
+Person = new Class(BaseModel,
   initialize: (obj) ->
     @callSuper!
 
   fullName: ->
     [@firstName, @lastName].join ' '
 )
+
+exports = module.exports = Person

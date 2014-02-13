@@ -1,7 +1,6 @@
-rek       = require 'rekuire'
-requires  = rek 'requires'
+ModelMw = require('model-mw').Mw.model
 
-ModelMw = require('model-mw').ModelMw
+requires  = require '../requires'
 
 ContextDecorations = requires.file 'context_decorations'
 

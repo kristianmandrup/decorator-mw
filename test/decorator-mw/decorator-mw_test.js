@@ -7,7 +7,7 @@
   assert = require('chai').assert;
   expect = require('chai').expect;
   Person = requires.clazz('person');
-  DecoratorMw = requires.file('decorator-mw');
+  DecoratorMw = requires.file('decorator_mw');
   loadMwStack = new Middleware('model').use({
     decorate: DecoratorMw
   });

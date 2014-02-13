@@ -4,20 +4,22 @@ Hash   = require('jsclass/src/core').Hash
 
 _ = require 'prelude-ls'
 
-rek       = require 'rekuire'
-requires  = rek 'requires'
+requires  = require '../requires'
 
-Decorations = requires.file 'decorations'
+Decorations = requires.lib 'decorations'
 
-module.exports = new Class(
+CtxDecorations = new Class(
   initialize: (decorations)->
     @repository = new Hash
 
     return if decorations is void
+
+    self = @
     if _.is-type 'Object', decorations
       decorations.each (name, dec) ->
-        @set name, dec
- 
+        self.set name, dec
+    @
+
   # ctx-name (String) the name of the context, if none given, use 'default' context
   # - get a Hash of decorations for a given context 
   # -----------------------------------------------
@@ -81,3 +83,5 @@ module.exports = new Class(
           @set(ctx, name, dec)
  
 )
+
+module.exports = CtxDecorations

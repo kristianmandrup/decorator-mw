@@ -1,6 +1,5 @@
 require 'sugar'
 
-rek = require 'rekuire'
 _   = require 'prelude-ls'
 
 underscore = (...items) ->
@@ -35,7 +34,10 @@ module.exports =
     @test 'fixtures', paths
 
   file: (...paths) ->
-    require lib-path('.', paths)
+    require full-path(paths)
+
+  lib: (...paths) ->
+    require lib-path(paths)
 
   # m - alias for module
   m: (path) ->

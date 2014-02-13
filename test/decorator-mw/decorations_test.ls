@@ -3,46 +3,49 @@ requires  = rek 'requires'
 
 requires.test 'test_setup'
 
-assert = require('chai').assert
-expect = require('chai').expect
+assert  = require('chai').assert
+expect  = require('chai').expect
+
+_       = require 'prelude-ls'
 
 Person = requires.clazz 'person'
-
-DecoratorMw = requires.file 'decorator-mw'
 
 # load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
 
 Decorations = requires.file 'decorations'
 
-describe Decorations ->
+console.log 'Decorations', Decorations
+
+describe 'Decorations' ->
   decs = {}
 
   describe 'create instance' ->
     context 'no args' ->
       before ->
         decs.empty = new Decorations
+        console.log 'empty', decs.empty, decs.empty.repository
 
       specify 'has Hash registry' ->
-        decs.empty.repository.constructor.should.eql Hash
+        expect(decs.empty.repository).to.be.empty
 
       specify 'has no keys' ->
         _.keys(decs.empty.repository).length.should.eql 0
 
     context 'with hash' ->
       before ->
-        decs.basic = new Decorations x: 1, y: 2
+        decs.basic = new Decorations x: ( -> 'x' ), y: ( -> 'y' )
 
       specify 'has Hash registry' ->
-        decs.basic.repository.constructor.should.eql Hash
+        decs.basic.repository.should.not.be.empty
 
       specify 'has 2 keys' ->
         _.keys(decs.basic.repository).length.should.eql 2
 
       specify 'repo x = 1' ->
-        decs.basic.repository.x.should.eql 1
+        decs.basic.repository.x!.should.eql 'x'
 
       specify 'repo y = 2' ->
-        decs.basic.repository.y.should.eql 2
+        decs.basic.repository.y!.should.eql 'y'
 
   describe 'get' ->
     context 'empty repo' ->
@@ -69,16 +72,16 @@ describe Decorations ->
         decs.setme = new Decorations
 
       specify 'x is found' ->
-        expect(decs.setme.set 'x').to.throw
+        expect( -> decs.setme.set 'x').to.throw
 
 
     context 'repo x = 2' ->
       before ->
         decs.setme = new Decorations
-        decs.setme.set 'x', 2
+        decs.setme.set 'x', (-> '2')
 
       specify 'x is found' ->
-        expect(decs.setme.get 'x').to.eql 2
+        expect(decs.setme.get('x')!).to.eql '2'
 
       specify 'xx is not found' ->
         expect(decs.setme.get 'xx').to.eql void
