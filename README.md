@@ -4,9 +4,29 @@ Middleware to serialize object to server and back to client
 
 ## Usage
 
-Using `klass` attribute to lookup class on client class Repo (Hash).
+Using `klass` attribute to lookup "class" on client class Repo (Hash).
 
-Instantiate Class with object
+Simple example
+
+```LiveScript
+Person = (data-obj)->
+  lo.extend data-obj, {  
+    fullName: ->
+      [@firstName, @lastName].join ' '
+  }
+)
+
+person =
+    name: 'Joe 6 Pack'
+age: 28
+clazz: 'person' # important!
+
+decorated-person = decotor-mw.decorate person
+```
+
+*Advanced example*
+
+Loaded data object is decorated to become a Class instance:
 
 ```LiveScript
 BaseModel           = requires.file 'base_model'
