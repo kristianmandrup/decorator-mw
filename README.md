@@ -1,14 +1,21 @@
 # Decorator Mw
 
-Middleware to serialize object to server and back to client
+Middleware to decorate a data object with class like behavior.
+
+Works well with other middlewares from my *middleware* project
+
+* middleware
+* model-mw
+* authorize-mw
+* validator-mw
+* marshaller-mw
 
 ## Usage
-
-Using `klass` attribute to lookup "class" on client class Repo (Hash).
 
 Simple example
 
 ```LiveScript
+# a Person "class", simply extend data object with some behavior
 Person = (data-obj)->
   lo.extend data-obj, {  
     fullName: ->
@@ -16,15 +23,24 @@ Person = (data-obj)->
   }
 )
 
+# a simulated loaded data model for person
 person =
-    name: 'Joe 6 Pack'
-age: 28
-clazz: 'person' # important!
+  name: 'Joe 6 Pack'
+  age: 28
+  clazz: 'person' # identifies the model used for lookup in repo to find decorator
 
-decorated-person = decotor-mw.decorate person
+DecorateMw = requires.file 'decorate-mw'
+
+# create standalone decorator middleware instance
+decorator-mw = new DecorateMw
+
+# decorate person via decorator middleware instance
+decorated-person = decorator-mw.run person
 ```
 
 *Advanced example*
+
+Using `klass` attribute to lookup "class" on client class repository.
 
 Loaded data object is decorated to become a Class instance:
 
@@ -32,6 +48,7 @@ Loaded data object is decorated to become a Class instance:
 BaseModel           = requires.file 'base_model'
 ContextDecorators   = require('decorator-mw').ContextDecorators
 
+# example of using Class from jsclass library
 Person = new Class(BaseModel,
   initialize: (obj) ->
     @callSuper!
@@ -42,26 +59,31 @@ Person = new Class(BaseModel,
 
 DecorateMw = requires.file 'decorate-mw'
 
+# set middleware to be used when loading data from data storage (such as Racer.js)
 load-mw-stack = new Middleware('model').use(decorate: DecorateMw)
 
+# application decorators repo
 app ||=
   decorators: new ContextDecorators
 
-# should be a global repo
+# register a decorator Person for the person model
 app.decorators.set 'person', Person
 
+# a simulated loaded data model for person
 person =
-    name: 'Joe 6 Pack'
-age: 28
-clazz: 'person' # important!
+  name: 'Joe 6 Pack'
+  age: 28
+  clazz: 'person' # identifies the model used for lookup in repo to find decorator
 
-# find and instantiate model class via clazz attribute (= 'person')
+# find and instantiate model class via decorate middleware
 decorated-person = load-mw-stack.run person
 ```
 
 ## TODO
 
-Create better test suite!
+Improve test suite!
+
+## Contribution
 
 Please help out ;)
 
