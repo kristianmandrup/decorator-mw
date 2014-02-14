@@ -106,12 +106,6 @@ app =
 # register a decorator Person for the person model
 app.decorators.set 'person', Person
 
-# a simulated loaded data model for person
-person =
-  name: 'Joe 6 Pack'
-  age: 28
-  clazz: 'person' # identifies the model used for lookup in repo to find decorator
-
 # find and instantiate model class via decorate middleware
 decorated-person = load-mw-stack.run person
 ```
