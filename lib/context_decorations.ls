@@ -20,13 +20,17 @@ CtxDecorations = new Class(Repo,
   get-repo: (ctx-name) ->
     ctx-name ||= 'default'
     decs = @repository.find(ctx-name) || new Decorations
+    console.log ctx-name, decs
     @repository.store ctx-name, decs
     decs
  
   # if called only with mode, use default context mode
-  find: (ctx, model) ->
-    repository = if arguments.length is 1 then @get-repo! else @get-repo(ctx)
-    repository.find model
+  find: (ctx-name, model) ->
+    if model is void
+      model = ctx-name
+      ctx-name = 'default'
+    console.log ctx-name, model
+    @get-repo(ctx-name).find model
  
   # if no name set, use decoration name or constructor.display-name
   # various valid ways to call

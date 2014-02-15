@@ -36,20 +36,22 @@ describe 'ContextDecorations' ->
     # should validate!
     context 'with hash' ->
       before ->
-        cds.basic = new CtxDecorations x: 1, y: 2
+        x-repo = new Decorations 'x': ( -> '1' ), y: ( -> '2' )
+        cds.basic = new CtxDecorations default: x-repo
+        console.log 'found x', cds.basic.find('x')
 
       specify 'has Hash registry' ->
         cds.basic.repository.constructor.should.equal OrderedHash
 
       describe 'repository' ->
         specify 'has 2 keys' ->
-          expect(cds.basic.repository.keys!.length).to.equal 2
+          expect(cds.basic.repository.keys!.length).to.equal 1
 
         specify 'repo x = 1' ->
-          expect(cds.basic.find('x')).to.equal 1
+          expect(cds.basic.find('x')!).to.equal '1'
 
         specify 'repo y = 2' ->
-          expect(cds.basic.find('y')).to.equal 2
+          expect(cds.basic.find('y')!).to.equal '2'
 
   xdescribe 'get' ->
     context 'empty repo' ->

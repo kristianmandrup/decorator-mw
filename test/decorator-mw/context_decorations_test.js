@@ -28,23 +28,32 @@
       });
       return context('with hash', function(){
         before(function(){
-          return cds.basic = new CtxDecorations({
-            x: 1,
-            y: 2
+          var xRepo;
+          xRepo = new Decorations({
+            'x': function(){
+              return '1';
+            },
+            y: function(){
+              return '2';
+            }
           });
+          cds.basic = new CtxDecorations({
+            'default': xRepo
+          });
+          return console.log('found x', cds.basic.find('x'));
         });
         specify('has Hash registry', function(){
           return cds.basic.repository.constructor.should.equal(OrderedHash);
         });
         return describe('repository', function(){
           specify('has 2 keys', function(){
-            return expect(cds.basic.repository.keys().length).to.equal(2);
+            return expect(cds.basic.repository.keys().length).to.equal(1);
           });
           specify('repo x = 1', function(){
-            return expect(cds.basic.find('x')).to.equal(1);
+            return expect(cds.basic.find('x')()).to.equal('1');
           });
           return specify('repo y = 2', function(){
-            return expect(cds.basic.find('y')).to.equal(2);
+            return expect(cds.basic.find('y')()).to.equal('2');
           });
         });
       });
