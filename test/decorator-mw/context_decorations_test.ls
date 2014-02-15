@@ -48,24 +48,26 @@ describe 'ContextDecorations' ->
           expect(cds.basic.repository.keys!.length).to.equal 1
 
         specify 'repo x = 1' ->
-          expect(cds.basic.find('x')!).to.equal '1'
+          expect(cds.basic.find 'default', 'x').to.not.equal null
 
         specify 'repo y = 2' ->
-          expect(cds.basic.find('y')!).to.equal '2'
+          expect(cds.basic.find 'y').to.not.equal null
 
   describe 'get' ->
     context 'empty repo' ->
       before ->
         cds.empty = new CtxDecorations
+
       specify 'x not found' ->
-        expect(cds.empty.find 'x').to.equal null
+        expect(cds.empty.find('x')).to.equal void
 
   describe 'set' ->
     context 'repo x = 2' ->
       before ->
         cds.setme   = new CtxDecorations
-        dcs.person  = new Decorations 'person': ( -> 'Person' )
-        cds.setme.register 'x', dcs.person
+        dcs.person  = ( -> 'Person' )
+        cds.setme.register 'admin', {person: dcs.person}
+        # console.log cds.setme.repository.admin
 
       specify 'x is found' ->
-        expect(cds.setme.find('x')).to.equal dcs.person
+        expect(cds.setme.find 'admin', 'person').to.equal dcs.person

@@ -19,18 +19,24 @@ CtxDecorations = new Class(Repo,
   #   such as when using a context object to determine the decoration to load
   get-repo: (ctx-name) ->
     ctx-name ||= 'default'
-    decorations = @repository.get(ctx-name) || new Decorations
-    @repository.store ctx-name, decorations
-    decorations
- 
+    @repository.get(ctx-name)
+
+  get-or-init-repo: (ctx-name) ->
+    ctx-name ||= 'default'
+    @get-repo(ctx-name) || @init-repo(ctx-name)
+
+  init-repo: (ctx-name) ->
+    @repository.store ctx-name, new Decorations
+    @repository.get ctx-name
+
   # if called only with mode, use default context mode
   find: (ctx-name, model) ->
     if model is void
       model = ctx-name
       ctx-name = 'default'
 
-    repo = @get-repo(ctx-name)
-    repo.find model
+    repo = @get-repo ctx-name
+    repo.find model if repo
  
   # if no name set, use decoration name or constructor.display-name
   # various valid ways to call
@@ -38,28 +44,54 @@ CtxDecorations = new Class(Repo,
   #   - register 'admin', decoration
   #   - register 'admin', 'person', person-decoration
   register: ->
-    console.log 'register: arguments', arguments
+    self = @
     switch arguments.length
     case 1
       decoration = arguments[0]
       name = @name-of(decoration)
-      @get-repo!.register name, decoration
+      @get-or-init-repo!.register name, decoration
  
     # todo, allow 2nd argument to be Array of decorations
     case 2
       decoration = arguments[1]
       ctx = arguments[0]
-      name = @name-of(decoration)
-      @get-repo(ctx).register name, decoration
- 
-    obj = if name? then decorations else decorations[name]
-    @repository.register ctx, obj
- 
+      repo = @get-or-init-repo ctx
+
+      # only if single Decorations being registered!
+      switch typeof decoration
+      case 'array'
+        register-list ctx, decoration
+
+      case 'object'
+        unless decoration.name?
+          @register-hash ctx, decoration
+          return
+
+        # register single obj
+        name = @name-of(decoration)
+        repo.register name, decoration
+
+    case 3
+      ctx = arguments[0]
+      model-name = arguments[1]
+      klass = arguments[2]
+
+      repo = @get-or-init-repo ctx
+      repo.register model-name, klass
+
   name-of: (decoration) ->
     unless _.is-type 'Object', decoration
       throw Error "Decorator must be an Object, was: #{decoration}"
+
+    unless decoration.name?
+      throw Error "Decorator must have a name function, #{decoration}"
     decoration.name!
- 
+
+  register-hash: (ctx, hash) ->
+    self = @
+    _.keys(hash).each (key) ->
+      self.register ctx, key, hash[key]
+
   register-list: ->
     self = @
     switch arguments.length

@@ -50,10 +50,10 @@
             return expect(cds.basic.repository.keys().length).to.equal(1);
           });
           specify('repo x = 1', function(){
-            return expect(cds.basic.find('x')()).to.equal('1');
+            return expect(cds.basic.find('default', 'x')).to.not.equal(null);
           });
           return specify('repo y = 2', function(){
-            return expect(cds.basic.find('y')()).to.equal('2');
+            return expect(cds.basic.find('y')).to.not.equal(null);
           });
         });
       });
@@ -64,7 +64,7 @@
           return cds.empty = new CtxDecorations;
         });
         return specify('x not found', function(){
-          return expect(cds.empty.find('x')).to.equal(null);
+          return expect(cds.empty.find('x')).to.equal(void 8);
         });
       });
     });
@@ -72,15 +72,15 @@
       return context('repo x = 2', function(){
         before(function(){
           cds.setme = new CtxDecorations;
-          dcs.person = new Decorations({
-            'person': function(){
-              return 'Person';
-            }
+          dcs.person = function(){
+            return 'Person';
+          };
+          return cds.setme.register('admin', {
+            person: dcs.person
           });
-          return cds.setme.register('x', dcs.person);
         });
         return specify('x is found', function(){
-          return expect(cds.setme.find('x')).to.equal(dcs.person);
+          return expect(cds.setme.find('admin', 'person')).to.equal(dcs.person);
         });
       });
     });

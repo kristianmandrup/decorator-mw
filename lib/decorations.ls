@@ -15,6 +15,9 @@ Decorations = new Class(Repo,
   initialize: (hash) ->
     @call-super!
 
+  is-empty: ->
+    @repository.is-empty!
+
   # model-name (String) the name of the model
   # returns a "Class"
   find: (model-name) ->
@@ -25,7 +28,7 @@ Decorations = new Class(Repo,
   # sets a "Class" for the key model-name
   register: (model-name, klass) ->
     unless _.is-type 'Function', klass
-      throw Error "klass to be set must be a Function, was: #{typeof klass} :: #{klass}"
+      throw Error "klass to be set must be a Function, was: #{typeof klass} , #{klass}"
 
     @repository.store model-name, klass
 )
