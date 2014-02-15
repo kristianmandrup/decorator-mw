@@ -1,5 +1,4 @@
-rek       = require 'rekuire'
-requires  = rek 'requires'
+requires  = require '../../requires'
 
 requires.test 'test_setup'
 
@@ -12,7 +11,8 @@ Person = requires.clazz 'person'
 
 # load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
 
-Decorations = requires.file 'decorations'
+OrderedHash    = require('jsclass/src/hash').OrderedHash
+Decorations    = requires.lib 'decorations'
 
 console.log 'Decorations', Decorations
 
@@ -23,48 +23,47 @@ describe 'Decorations' ->
     context 'no args' ->
       before ->
         decs.empty = new Decorations
-        console.log 'empty', decs.empty, decs.empty.repository
 
       specify 'has Hash registry' ->
-        expect(decs.empty.repository).to.be.empty
+        expect(decs.empty.repository.is-empty!).to.be.true
 
       specify 'has no keys' ->
-        _.keys(decs.empty.repository).length.should.eql 0
+        expect(decs.empty.repository.keys!.length).to.equal 0
 
     context 'with hash' ->
       before ->
-        decs.basic = new Decorations x: ( -> 'x' ), y: ( -> 'y' )
+        decs.basic = new Decorations 'x': ( -> 'x' ), y: ( -> 'y' )
 
       specify 'has Hash registry' ->
         decs.basic.repository.should.not.be.empty
 
       specify 'has 2 keys' ->
-        _.keys(decs.basic.repository).length.should.eql 2
+        expect(decs.basic.repository.keys!.length).to.equal 2
 
       specify 'repo x = 1' ->
-        decs.basic.repository.x!.should.eql 'x'
+        expect(decs.basic.find('x')!).to.equal 'x'
 
       specify 'repo y = 2' ->
-        decs.basic.repository.y!.should.eql 'y'
+        expect(decs.basic.find('y')!).to.equal 'y'
 
-  describe 'get' ->
+  describe 'find' ->
     context 'empty repo' ->
       before ->
         decs.empty = new Decorations
       specify 'x not found' ->
-        expect(decs.empty.get 'x').to.eql void
+        expect(decs.empty.find 'x').to.equal null
 
     context 'repo with xx' ->
       before ->
         decs.basic = new Decorations xx: 'y'
       specify 'not found' ->
-        expect(decs.basic.get 'x').to.eql void
+        expect(decs.basic.find 'x').to.equal null
 
     context 'repo with x' ->
       before ->
         decs.basic = new Decorations x: 'y'
       specify 'found' ->
-        expect(decs.basic.get 'x').to.eql 'y'
+        expect(decs.basic.find 'x').to.equal 'y'
 
   describe 'set' ->
     context 'repo x' ->
@@ -72,16 +71,16 @@ describe 'Decorations' ->
         decs.setme = new Decorations
 
       specify 'x is found' ->
-        expect( -> decs.setme.set 'x').to.throw
+        expect( -> decs.setme.register 'x').to.throw
 
 
     context 'repo x = 2' ->
       before ->
         decs.setme = new Decorations
-        decs.setme.set 'x', (-> '2')
+        decs.setme.register 'x', (-> '2')
 
       specify 'x is found' ->
-        expect(decs.setme.get('x')!).to.eql '2'
+        expect(decs.setme.find('x')!).to.equal '2'
 
       specify 'xx is not found' ->
-        expect(decs.setme.get 'xx').to.eql void
+        expect(decs.setme.find 'xx').to.equal null

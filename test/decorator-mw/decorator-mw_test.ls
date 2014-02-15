@@ -1,6 +1,4 @@
-rek       = require 'rekuire'
-requires  = rek 'requires'
-
+requires  = require '../../requires'
 requires.test 'test_setup'
 
 assert = require('chai').assert
@@ -8,7 +6,7 @@ expect = require('chai').expect
 
 Person = requires.clazz 'person'
 
-DecoratorMw = requires.file 'decorator_mw'
+DecoratorMw = requires.mw 'decorator_mw'
 
 load-mw-stack = new Middleware('model').use(decorate: DecoratorMw)
 

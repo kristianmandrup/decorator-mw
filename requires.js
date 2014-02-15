@@ -62,6 +62,11 @@
       paths = slice$.call(arguments);
       return require(libPath(paths));
     },
+    mw: function(){
+      var paths;
+      paths = slice$.call(arguments);
+      return require(libPath('mw', paths));
+    },
     m: function(path){
       return this.file(path);
     },

@@ -1,8 +1,9 @@
-ModelMw = require('model-mw').Mw.model
+model-mw      = require 'model-mw'
+ModelMw       = model-mw.mw
 
-requires  = require '../requires'
+requires  = require '../../requires'
 
-ContextDecorations = requires.file 'context_decorations'
+CtxDecorations = requires.lib 'context_decorations'
 
 module.exports = class DecoratorMw extends ModelMw
   (@context) ->
@@ -13,7 +14,7 @@ module.exports = class DecoratorMw extends ModelMw
     if context.decorators? then create-decorations(context.decorators) else app.decorators
  
   create-decorations: (context) ->
-    new ContextDecorations context
+    new CtxDecorations context
   
   # lookup context
   # find decoration based on klass and context

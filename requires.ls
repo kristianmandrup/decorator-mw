@@ -39,6 +39,9 @@ module.exports =
   lib: (...paths) ->
     require lib-path(paths)
 
+  mw: (...paths) ->
+    require lib-path('mw', paths)
+
   # m - alias for module
   m: (path) ->
     @file path
