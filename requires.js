@@ -60,12 +60,12 @@
     lib: function(){
       var paths;
       paths = slice$.call(arguments);
-      return require(libPath(paths));
+      return require(libPath.apply(null, paths));
     },
     mw: function(){
       var paths;
       paths = slice$.call(arguments);
-      return require(libPath('mw', paths));
+      return this.lib.apply(this, ['mw'].concat(slice$.call(paths)));
     },
     m: function(path){
       return this.file(path);
