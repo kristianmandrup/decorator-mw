@@ -3,9 +3,9 @@
   var requires;
   requires = require('./requires');
   module.exports = {
-    DecoratorMw: requires.file('decorator_mw'),
-    Decorations: requires.file('decorations'),
-    CtxDecorations: requires.file('context_decorations'),
-    BaseModel: requires.file('base_model')
+    DecoratorMw: requires.lib('decorator_mw'),
+    Decorations: requires.lib('decorations'),
+    CtxDecorations: requires.lib('context_decorations'),
+    BaseModel: requires.lib('base_model')
   };
 }).call(this);
