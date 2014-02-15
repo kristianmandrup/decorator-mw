@@ -20,6 +20,7 @@ CtxDecorations = requires.lib 'context_decorations'
 
 describe 'ContextDecorations' ->
   cds = {}
+  dcs = {}
 
   describe 'create instance' ->
     context 'no args' ->
@@ -38,7 +39,6 @@ describe 'ContextDecorations' ->
       before ->
         x-repo = new Decorations 'x': ( -> '1' ), y: ( -> '2' )
         cds.basic = new CtxDecorations default: x-repo
-        console.log 'found x', cds.basic.find('x')
 
       specify 'has Hash registry' ->
         cds.basic.repository.constructor.should.equal OrderedHash
@@ -53,18 +53,19 @@ describe 'ContextDecorations' ->
         specify 'repo y = 2' ->
           expect(cds.basic.find('y')!).to.equal '2'
 
-  xdescribe 'get' ->
+  describe 'get' ->
     context 'empty repo' ->
       before ->
         cds.empty = new CtxDecorations
       specify 'x not found' ->
-        expect(dcs.empty.find 'x').to.equal void
+        expect(cds.empty.find 'x').to.equal null
 
-  xdescribe 'set' ->
+  describe 'set' ->
     context 'repo x = 2' ->
       before ->
-        cds.setme = new CtxDecorations
-        cds.setme.register 'x', 2
+        cds.setme   = new CtxDecorations
+        dcs.person  = new Decorations 'person': ( -> 'Person' )
+        cds.setme.register 'x', dcs.person
 
       specify 'x is found' ->
-        expect(cds.setme.find 'x').to.equal 2
+        expect(cds.setme.find('x')).to.equal dcs.person

@@ -12,8 +12,9 @@
   Decorations = requires.lib('decorations');
   CtxDecorations = requires.lib('context_decorations');
   describe('ContextDecorations', function(){
-    var cds;
+    var cds, dcs;
     cds = {};
+    dcs = {};
     describe('create instance', function(){
       context('no args', function(){
         before(function(){
@@ -37,10 +38,9 @@
               return '2';
             }
           });
-          cds.basic = new CtxDecorations({
+          return cds.basic = new CtxDecorations({
             'default': xRepo
           });
-          return console.log('found x', cds.basic.find('x'));
         });
         specify('has Hash registry', function(){
           return cds.basic.repository.constructor.should.equal(OrderedHash);
@@ -58,24 +58,29 @@
         });
       });
     });
-    xdescribe('get', function(){
+    describe('get', function(){
       return context('empty repo', function(){
         before(function(){
           return cds.empty = new CtxDecorations;
         });
         return specify('x not found', function(){
-          return expect(dcs.empty.find('x')).to.equal(void 8);
+          return expect(cds.empty.find('x')).to.equal(null);
         });
       });
     });
-    return xdescribe('set', function(){
+    return describe('set', function(){
       return context('repo x = 2', function(){
         before(function(){
           cds.setme = new CtxDecorations;
-          return cds.setme.register('x', 2);
+          dcs.person = new Decorations({
+            'person': function(){
+              return 'Person';
+            }
+          });
+          return cds.setme.register('x', dcs.person);
         });
         return specify('x is found', function(){
-          return expect(cds.setme.find('x')).to.equal(2);
+          return expect(cds.setme.find('x')).to.equal(dcs.person);
         });
       });
     });

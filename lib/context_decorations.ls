@@ -19,18 +19,18 @@ CtxDecorations = new Class(Repo,
   #   such as when using a context object to determine the decoration to load
   get-repo: (ctx-name) ->
     ctx-name ||= 'default'
-    decs = @repository.find(ctx-name) || new Decorations
-    console.log ctx-name, decs
-    @repository.store ctx-name, decs
-    decs
+    decorations = @repository.get(ctx-name) || new Decorations
+    @repository.store ctx-name, decorations
+    decorations
  
   # if called only with mode, use default context mode
   find: (ctx-name, model) ->
     if model is void
       model = ctx-name
       ctx-name = 'default'
-    console.log ctx-name, model
-    @get-repo(ctx-name).find model
+
+    repo = @get-repo(ctx-name)
+    repo.find model
  
   # if no name set, use decoration name or constructor.display-name
   # various valid ways to call
@@ -38,26 +38,27 @@ CtxDecorations = new Class(Repo,
   #   - register 'admin', decoration
   #   - register 'admin', 'person', person-decoration
   register: ->
+    console.log 'register: arguments', arguments
     switch arguments.length
     case 1
-      decoration = arguments.first
+      decoration = arguments[0]
       name = @name-of(decoration)
       @get-repo!.register name, decoration
  
     # todo, allow 2nd argument to be Array of decorations
     case 2
-      decoration = arguments.last
-      ctx = arguments.first
+      decoration = arguments[1]
+      ctx = arguments[0]
       name = @name-of(decoration)
       @get-repo(ctx).register name, decoration
  
     obj = if name? then decorations else decorations[name]
     @repository.register ctx, obj
  
-    name-of: (decoration) ->
-      unless _.type-of 'Object', decoration
-        throw Error "Decorator must be an Object, was: #{decoration}"
-      decoration.name!
+  name-of: (decoration) ->
+    unless _.is-type 'Object', decoration
+      throw Error "Decorator must be an Object, was: #{decoration}"
+    decoration.name!
  
   register-list: ->
     self = @
