@@ -55,18 +55,32 @@ Decorations = new Class(Repo,
     # TODO: improve this? allow model function instead?
     model ||= data-obj.model || data-obj.clazz
     unless model
+      if arguments.length is 1
+        return @decorate-w-hash data-obj
+
       throw Error "Unable to determine model to be used for applying decoration"
 
     decorator = @repository.get model
     unless decorator
       throw Error "No decorator for #{model} could be found in the repo: #{@repository}"
 
-    apply-decoration data-obj, decorator
+    @apply-decoration data-obj, decorator
+
+  decorate-w-hash: (hash) ->
+    self = @
+    keys = _.keys(hash)
+    if keys.length is 1
+      decorated = null
+      _.keys(hash).each (key) ->
+        decorated = self.decorate hash[key], key
+      return decorated
+
+    throw Error "Decoration error, invalid argument: #{hash}"
 
   # TODO: refactor and clean up (extract classes?)
   apply-decoration: (data-obj, decorator) ->
     if typeof decorator is 'object'
-      apply-decoration-blueprint data-obj, decorator
+      @apply-decoration-blueprint data-obj, decorator
 
     if typeof decorator is 'function'
       # constructor function (or class)

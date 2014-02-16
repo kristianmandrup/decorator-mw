@@ -71,6 +71,12 @@ ctx-decorations.for-model('person').register guest: GuestPerson, admin: AdminPer
 # get context, then decorate :)
 # require person has a model or clazz attribute
 decorated-person = ctx-decorations.ctx('admin').decorate person
+
+# specifying decorator to use as optional 2nd arg: AdminPerson
+decorated-person = ctx-decorations.ctx('admin').decorate person, 'AdminPerson'
+
+# specifying decorator to use via Hash: super-admin-person
+decorated-person = ctx-decorations.ctx('admin').decorate super-admin-person: person
 ```
 
 Note: Some of the above DSL notations are not yet available, please help implement them ;)

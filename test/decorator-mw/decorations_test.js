@@ -80,8 +80,8 @@
         });
       });
     });
-    return describe('set', function(){
-      context('repo x', function(){
+    describe('register', function(){
+      context('with x', function(){
         before(function(){
           return decs.setme = new Decorations;
         });
@@ -91,7 +91,7 @@
           }).to['throw'];
         });
       });
-      context('repo x = 2', function(){
+      context('with x, Function', function(){
         before(function(){
           decs.setme = new Decorations;
           return decs.setme.register('x', function(){
@@ -105,7 +105,7 @@
           return expect(decs.setme.find('xx')).to.equal(null);
         });
       });
-      return context('repo z = 3', function(){
+      return context('with Hash', function(){
         before(function(){
           decs.setme = new Decorations;
           return decs.setme.register({
@@ -122,6 +122,76 @@
         });
         return specify('zz is not found', function(){
           return expect(decs.setme.find('zz')).to.equal(null);
+        });
+      });
+    });
+    return describe('decorate', function(){
+      var dataObjs;
+      dataObjs = {};
+      before(function(){
+        decs.setme = new Decorations;
+        decs.setme.register({
+          z: function(){
+            return '3';
+          }
+        });
+        dataObjs.empty = {};
+        dataObjs.wmodel = {
+          model: 'z'
+        };
+        return dataObjs.wclazz = {
+          clazz: 'z'
+        };
+      });
+      context('with data-obj', function(){
+        context('with no model or clazz', function(){
+          return specify('should throw', function(){
+            return expect(function(){
+              return decs.setme.decorate(dataObjs.empty);
+            }).to['throw'];
+          });
+        });
+        context('with model', function(){
+          return specify('should not throw', function(){
+            return expect(decs.setme.decorate(dataObjs.wmodel)).to.not['throw'];
+          });
+        });
+        return context('with clazz', function(){
+          return specify('should not throw', function(){
+            return expect(decs.setme.decorate(dataObjs.wclazz)).to.not['throw'];
+          });
+        });
+      });
+      context('with data-obj, model', function(){
+        context('invalid model', function(){
+          return specify('should throw', function(){
+            return expect(function(){
+              return decs.setme.decorate(dataObjs.empty, 'unknown');
+            }).to['throw'];
+          });
+        });
+        return context('valid model', function(){
+          return specify('should not throw', function(){
+            return expect(decs.setme.decorate(dataObjs.empty, 'z')).to.not['throw'];
+          });
+        });
+      });
+      return context('with Object model: data-obj', function(){
+        context('invalid model', function(){
+          return specify('should throw', function(){
+            return expect(function(){
+              return decs.setme.decorate({
+                unknown: dataObjs.empty
+              });
+            }).to['throw'];
+          });
+        });
+        return context('valid model', function(){
+          return specify('should not throw', function(){
+            return expect(decs.setme.decorate({
+              z: dataObjs.empty
+            })).to.not['throw'];
+          });
         });
       });
     });

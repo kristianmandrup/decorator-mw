@@ -65,8 +65,8 @@ describe 'Decorations' ->
       specify 'found' ->
         expect(decs.basic.find 'x').to.equal 'y'
 
-  describe 'set' ->
-    context 'repo x' ->
+  describe 'register' ->
+    context 'with x' ->
       before ->
         decs.setme = new Decorations
 
@@ -74,7 +74,7 @@ describe 'Decorations' ->
         expect( -> decs.setme.register 'x').to.throw
 
 
-    context 'repo x = 2' ->
+    context 'with x, Function' ->
       before ->
         decs.setme = new Decorations
         decs.setme.register 'x', (-> '2')
@@ -85,7 +85,7 @@ describe 'Decorations' ->
       specify 'xx is not found' ->
         expect(decs.setme.find 'xx').to.equal null
 
-    context 'repo z = 3' ->
+    context 'with Hash' ->
       before ->
         decs.setme = new Decorations
         decs.setme.register z: (-> '3')
@@ -98,3 +98,48 @@ describe 'Decorations' ->
 
       specify 'zz is not found' ->
         expect(decs.setme.find 'zz').to.equal null
+
+  describe 'decorate' ->
+    data-objs = {}
+
+    before ->
+      decs.setme = new Decorations
+      decs.setme.register z: (-> '3')
+      data-objs.empty = {}
+      data-objs.wmodel = {
+        model: 'z'
+      }
+      data-objs.wclazz = {
+        clazz: 'z'
+      }
+
+    context 'with data-obj' ->
+      context 'with no model or clazz' ->
+        specify 'should throw' ->
+          expect( -> decs.setme.decorate data-objs.empty).to.throw
+
+      context 'with model' ->
+        specify 'should not throw' ->
+          expect(decs.setme.decorate data-objs.wmodel).to.not.throw
+
+      context 'with clazz' ->
+        specify 'should not throw' ->
+          expect(decs.setme.decorate data-objs.wclazz).to.not.throw
+
+    context 'with data-obj, model' ->
+      context 'invalid model' ->
+        specify 'should throw' ->
+          expect( -> decs.setme.decorate data-objs.empty, 'unknown').to.throw
+
+      context 'valid model' ->
+        specify 'should not throw' ->
+          expect(decs.setme.decorate data-objs.empty, 'z').to.not.throw
+
+    context 'with Object model: data-obj' ->
+      context 'invalid model' ->
+        specify 'should throw' ->
+          expect( -> decs.setme.decorate unknown: data-objs.empty).to.throw
+
+      context 'valid model' ->
+        specify 'should not throw' ->
+          expect(decs.setme.decorate z: data-objs.empty).to.not.throw
