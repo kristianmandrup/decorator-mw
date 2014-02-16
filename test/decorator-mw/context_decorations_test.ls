@@ -82,3 +82,15 @@ describe 'ContextDecorations' ->
 
       specify 'x is found' ->
         expect(cds.setme.ctx('admin').find 'user').to.equal dcs.user
+
+  describe 'for-model' ->
+    context 'repo admin: user -> User' ->
+      before ->
+        cds.setme   = new CtxDecorations
+        dcs.user  = ( -> 'User' )
+        cds.setme.for-model('user').register admin: dcs.user
+        # console.log cds.setme.repository.admin
+
+      specify 'x is found' ->
+        expect(cds.setme.ctx('admin').find 'user').to.equal dcs.user
+

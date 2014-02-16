@@ -120,13 +120,13 @@ CtxDecorations = new Class(Repo,
     new ModelCtxFactory @, model-name
 )
 
-ModelCtxFactory = Class(
+ModelCtxFactory = new Class(
   initialize: (@ctx-decorations, @model) ->
 
   register: (hash) ->
     self = @
     _.keys(hash).each (ctx) ->
-      self.register ctx, @model, hash[ctx]
+      self.ctx-decorations.register ctx, self.model, hash[ctx]
 )
 
 

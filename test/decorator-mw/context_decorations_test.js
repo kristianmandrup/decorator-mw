@@ -84,7 +84,7 @@
         });
       });
     });
-    return describe('nice DSL', function(){
+    describe('nice DSL', function(){
       return context('repo admin: user -> User', function(){
         before(function(){
           cds.setme = new CtxDecorations;
@@ -93,6 +93,22 @@
           };
           return cds.setme.ctx('admin').register({
             user: dcs.user
+          });
+        });
+        return specify('x is found', function(){
+          return expect(cds.setme.ctx('admin').find('user')).to.equal(dcs.user);
+        });
+      });
+    });
+    return describe('for-model', function(){
+      return context('repo admin: user -> User', function(){
+        before(function(){
+          cds.setme = new CtxDecorations;
+          dcs.user = function(){
+            return 'User';
+          };
+          return cds.setme.forModel('user').register({
+            admin: dcs.user
           });
         });
         return specify('x is found', function(){
