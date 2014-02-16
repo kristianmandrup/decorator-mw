@@ -36,5 +36,5 @@ module.exports = class DecoratorMw extends ModelMw
   run: (ctx) ->
     super ...
     @set-decorations ctx
-    klass = @decorations.get @context, @model
-    new klass @data
+    # or just pass @data, if @data has a clazz or model attribute on it ;)
+    @decorations.ctx(@context).decorate @data, @model

@@ -79,8 +79,6 @@ decorated-person = ctx-decorations.ctx('admin').decorate person, 'AdminPerson'
 decorated-person = ctx-decorations.ctx('admin').decorate super-admin-person: person
 ```
 
-Note: Some of the above DSL notations are not yet available, please help implement them ;)
-
 *Simple Mw example*
 
 ```LiveScript
@@ -123,7 +121,7 @@ app =
   decorators: new ContextDecorators
 
 # register a decorator Person for the person model
-app.decorators.set 'person', Person
+app.decorators.register 'person', Person
 
 # find and instantiate model class via decorate middleware
 decorated-person = load-mw-stack.run person
