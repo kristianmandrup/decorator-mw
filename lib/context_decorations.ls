@@ -21,6 +21,9 @@ CtxDecorations = new Class(Repo,
     ctx-name ||= 'default'
     @repository.get(ctx-name)
 
+  ctx: (name) ->
+    @get-or-init-repo name
+
   get-or-init-repo: (ctx-name) ->
     ctx-name ||= 'default'
     @get-repo(ctx-name) || @init-repo(ctx-name)
@@ -111,7 +114,20 @@ CtxDecorations = new Class(Repo,
       case 'object'
         decorations.each (name, dec) ->
           self.register(ctx, name, dec)
- 
+
+  # for-model('person').register guest: GuestPerson, admin: AdminPerson,
+  for-model: (model-name) ->
+    new ModelCtxFactory @, model-name
 )
+
+ModelCtxFactory = Class(
+  initialize: (@ctx-decorations, @model) ->
+
+  register: (hash) ->
+    self = @
+    _.keys(hash).each (ctx) ->
+      self.register ctx, @model, hash[ctx]
+)
+
 
 module.exports = CtxDecorations

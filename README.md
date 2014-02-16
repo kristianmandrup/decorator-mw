@@ -16,13 +16,23 @@ Works well with other mw-components for the *middleware* project
 The examples below assume the following
 
 ```LiveScript
-# a Person "class", simply extend data object with some behavior
-Person = (data-obj)->
+# Example: a Person constructor function which simply extends data object with some behavior
+Person = (data-obj) ->
   lo.extend data-obj, {  
     fullName: ->
       [@firstName, @lastName].join ' '
   }
 )
+
+# Example: a Person blueprint object which extends data object with own state and behavior
+Person =
+  set-data: (data-obj)
+    lo.extend @, data-obj
+
+  fullName: ->
+    [@firstName, @lastName].join ' '
+)
+
 
 # a simulated loaded data model for person
 person =
@@ -37,7 +47,7 @@ You should be able to use the Decorations repository directly like this:
 Decorations = require('decorate-mw').Decorations
 
 decorations = new Decorations
-decorations.set 'person', Person
+decorations.register 'person', Person
 
 decorated-person = decorations.decorate person
 ```
@@ -49,14 +59,17 @@ Decorations = require('decorate-mw').CtxDecorations
 
 ctx-decorations = new CtxDecorations
 
-# you should also be able to set via some "smart hash"
-ctx-decorations.set 'guest', 'person', Person
-ctx-decorations.set 'admin', 'person', AdminPerson
+ctx-decorations.register 'guest', 'person', Person
+ctx-decorations.register 'admin', 'person', AdminPerson
 
-# this would be a nicer DSL to achieve the same
-ctx-decorations.for-model('person').set guest: GuestPErson, 'default': Person, admin: AdminPerson, 
+# can also be set via some "smart hash"
+ctx-decorations.register 'admin', person: AdminPerson
 
-# set context, then decorate :)
+# also allows a nicer DSL to achieve the same
+ctx-decorations.for-model('person').register guest: GuestPerson, admin: AdminPerson
+
+# get context, then decorate :)
+# require person has a model or clazz attribute
 decorated-person = ctx-decorations.ctx('admin').decorate person
 ```
 
@@ -85,7 +98,7 @@ Loaded data object is decorated to become a Class instance:
 BaseModel           = requires.file 'base_model'
 ContextDecorators   = require('decorator-mw').ContextDecorators
 
-# example of using Class from jsclass library
+# Example: using Class from jsclass as Decorator
 Person = new Class(BaseModel,
   initialize: (obj) ->
     @callSuper!
@@ -99,7 +112,7 @@ DecorateMw = requires.file 'decorate-mw'
 # set middleware to be used when loading data from data storage (such as Racer.js)
 load-mw-stack = new Middleware('model').use(decorate: DecorateMw)
 
-# application decorators repo
+# application decorators repo (used by default if none passed explicitly as argument)
 app =
   decorators: new ContextDecorators
 

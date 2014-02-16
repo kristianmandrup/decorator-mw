@@ -68,8 +68,8 @@
         });
       });
     });
-    return describe('set', function(){
-      return context('repo x = 2', function(){
+    describe('set', function(){
+      return context('repo admin: person -> Person', function(){
         before(function(){
           cds.setme = new CtxDecorations;
           dcs.person = function(){
@@ -81,6 +81,22 @@
         });
         return specify('x is found', function(){
           return expect(cds.setme.find('admin', 'person')).to.equal(dcs.person);
+        });
+      });
+    });
+    return describe('nice DSL', function(){
+      return context('repo admin: user -> User', function(){
+        before(function(){
+          cds.setme = new CtxDecorations;
+          dcs.user = function(){
+            return 'User';
+          };
+          return cds.setme.ctx('admin').register({
+            user: dcs.user
+          });
+        });
+        return specify('x is found', function(){
+          return expect(cds.setme.ctx('admin').find('user')).to.equal(dcs.user);
         });
       });
     });

@@ -91,7 +91,7 @@
           }).to['throw'];
         });
       });
-      return context('repo x = 2', function(){
+      context('repo x = 2', function(){
         before(function(){
           decs.setme = new Decorations;
           return decs.setme.register('x', function(){
@@ -103,6 +103,25 @@
         });
         return specify('xx is not found', function(){
           return expect(decs.setme.find('xx')).to.equal(null);
+        });
+      });
+      return context('repo z = 3', function(){
+        before(function(){
+          decs.setme = new Decorations;
+          return decs.setme.register({
+            z: function(){
+              return '3';
+            }
+          });
+        });
+        specify('z is found', function(){
+          return expect(decs.setme.find('z')).to.not.equal(null);
+        });
+        specify('z is function', function(){
+          return expect(decs.setme.find('z')()).to.equal('3');
+        });
+        return specify('zz is not found', function(){
+          return expect(decs.setme.find('zz')).to.equal(null);
         });
       });
     });

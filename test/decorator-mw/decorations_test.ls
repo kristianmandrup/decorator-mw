@@ -84,3 +84,17 @@ describe 'Decorations' ->
 
       specify 'xx is not found' ->
         expect(decs.setme.find 'xx').to.equal null
+
+    context 'repo z = 3' ->
+      before ->
+        decs.setme = new Decorations
+        decs.setme.register z: (-> '3')
+
+      specify 'z is found' ->
+        expect(decs.setme.find 'z').to.not.equal null
+
+      specify 'z is function' ->
+        expect(decs.setme.find('z')!).to.equal '3'
+
+      specify 'zz is not found' ->
+        expect(decs.setme.find 'zz').to.equal null

@@ -62,7 +62,7 @@ describe 'ContextDecorations' ->
         expect(cds.empty.find('x')).to.equal void
 
   describe 'set' ->
-    context 'repo x = 2' ->
+    context 'repo admin: person -> Person' ->
       before ->
         cds.setme   = new CtxDecorations
         dcs.person  = ( -> 'Person' )
@@ -71,3 +71,14 @@ describe 'ContextDecorations' ->
 
       specify 'x is found' ->
         expect(cds.setme.find 'admin', 'person').to.equal dcs.person
+
+  describe 'nice DSL' ->
+    context 'repo admin: user -> User' ->
+      before ->
+        cds.setme   = new CtxDecorations
+        dcs.user  = ( -> 'User' )
+        cds.setme.ctx('admin').register user: dcs.user
+        # console.log cds.setme.repository.admin
+
+      specify 'x is found' ->
+        expect(cds.setme.ctx('admin').find 'user').to.equal dcs.user

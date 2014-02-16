@@ -26,11 +26,59 @@ Decorations = new Class(Repo,
   # model-name: the name of the model
   # klass : the "Class" to set for the model-name key
   # sets a "Class" for the key model-name
-  register: (model-name, klass) ->
-    unless _.is-type 'Function', klass
-      throw Error "klass to be set must be a Function, was: #{typeof klass} , #{klass}"
+  register: ->
+    self = @
+    switch arguments.length
+    case 1
+      hash = arguments[0]
 
-    @repository.store model-name, klass
+      unless typeof hash is 'object'
+        throw Error "Invalid argument, must be an Object, was: #{hash}"
+
+      _.keys(hash).each (key) ->
+        self.register key, hash[key]
+    case 2
+      model-name  = arguments[0]
+      klass       = arguments[1]
+
+      unless _.is-type 'String', model-name
+        throw Error "Repository key must be a String, was: #{typeof model-name}, #{model-name}"
+
+      unless _.is-type 'Function', klass
+        throw Error "klass to be set for #{model-name} must be a Function, was: #{typeof klass} , #{klass}"
+
+      @repository.store model-name, klass
+    default
+      throw Error "Invalid arguments, must take Hash or String, Function, was: #{arguments}"
+
+  decorate: (data-obj, model) ->
+    # TODO: improve this? allow model function instead?
+    model ||= data-obj.model || data-obj.clazz
+    unless model
+      throw Error "Unable to determine model to be used for applying decoration"
+
+    decorator = @repository.get model
+    unless decorator
+      throw Error "No decorator for #{model} could be found in the repo: #{@repository}"
+
+    apply-decoration data-obj, decorator
+
+  # TODO: refactor and clean up (extract classes?)
+  apply-decoration: (data-obj, decorator) ->
+    if typeof decorator is 'object'
+      apply-decoration-blueprint data-obj, decorator
+
+    if typeof decorator is 'function'
+      # constructor function (or class)
+      return new decorator data-obj
+
+    throw Error "Can't determine a way to apply the decorator: #{decorator} on the data object"
+
+  apply-decoration-blueprint: (data-obj, decorator) ->
+    # blueprint mode
+    if decorator['set-data']
+      decorator.set-data data-obj
+      decorator
 )
 
 module.exports = Decorations
