@@ -66,11 +66,6 @@ Decorations = new Class(Repo,
 
     @apply-decoration data-obj, decorator
 
-  # TODO: major refactoring needed in future to clean up!
-  # used by marshaller
-  marshal: (data-obj, model) ->
-    @decorate data-obj, model
-
   decorate-w-hash: (hash) ->
     self = @
     keys = _.keys(hash)
