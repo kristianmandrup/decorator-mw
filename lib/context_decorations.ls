@@ -12,6 +12,8 @@ CtxDecorations = new Class(Repo,
   initialize: (decorations) ->
     @call-super!
 
+  repo-type: Decorations
+
   # ctx-name (String) the name of the context, if none given, use 'default' context
   # - get a Hash of decorations for a given context 
   # -----------------------------------------------
@@ -29,8 +31,11 @@ CtxDecorations = new Class(Repo,
     @get-repo(ctx-name) || @init-repo(ctx-name)
 
   init-repo: (ctx-name) ->
-    @repository.store ctx-name, new Decorations
+    @repository.store ctx-name, @empty-repo!
     @repository.get ctx-name
+
+  empty-repo: ->
+    new @repo-type
 
   # if called only with mode, use default context mode
   find: (ctx-name, model) ->
