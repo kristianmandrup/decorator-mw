@@ -129,7 +129,8 @@ decorated-person = load-mw-stack.run person
 
 ## TODO
 
-Improve test suite!
+* Improve test suite!
+* Use Applier class for application of decoration (also aids separation of marhaller)
 
 ## Contribution
 
