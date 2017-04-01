@@ -3,7 +3,7 @@
     "version":  "0.0.1",
     "main":     "index.js",
     "dependencies": {
-        "lodash" :      "~2.3.0",
+        "lodash" :      "~4.17.4",
         "sugar" :       "*",
         "prelude-ls" :  "*",        
         "observer":     "~1.1.*",
