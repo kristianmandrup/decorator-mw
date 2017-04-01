@@ -1,5 +1,7 @@
 # Decorator Mw
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kristianmandrup/decorator-mw.svg)](https://greenkeeper.io/)
+
 Middleware to decorate a data object with class like behavior.
 
 Works well with other mw-components for the *middleware* project
